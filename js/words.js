@@ -1,0 +1,1 @@
+const WORDS = 'chat code clavier ecran souris javascript vitesse phrase frappe azerty bonjour dactylo rapide projet session score minute entrainement developpeur ecole clavier ordinateur texte logique variable fonction boucle tableau mot lettre timer interface simple'.split(' ')

@@ -1,0 +1,14 @@
+# Extensions d'éditeurs (VS Code, etc.)
+.vscode/
+.idea/
+
+# Fichiers système (Mac et Windows)
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Si jamais tu installes des outils plus tard (npm)
+node_modules/
+dist/

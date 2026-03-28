@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dactylaro</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script defer src="js/words.js"></script>
+    <script defer src="js/app.js"></script>
+</head>
+
+<body>
+    <main>
+        <h1>Dactylaro</h1>
+
+        <label for="duration">Temps :</label>
+        <select id="duration">
+            <option value="10">10 secondes</option>
+            <option value="30">30 secondes</option>
+            <option value="60">60 secondes</option>
+        </select>
+
+        <button id="start">Démarrer</button>
+
+        <p>Temps restant : <span id="time">0</span>s</p>
+        <p>Mots validés : <span id="done">0</span></p>
+        <p>Score : <span id="score">0</span> MPM</p>
+
+        <div id="words"></div>
+        <p id="state"></p>
+
+        <input id="input" type="text" autocomplete="off" disabled>
+
+        <h2>Classement session</h2>
+        <ol id="rank"></ol>
+    </main>
+</body>
+
+</html>
