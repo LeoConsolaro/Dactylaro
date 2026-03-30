@@ -1,40 +1,51 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dactylaro</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/webp" sizes="32x32" href="favicon.webp">
     <script defer src="js/words.js"></script>
     <script defer src="js/app.js"></script>
 </head>
+<body class="bg-light l-blue-theme">
+    <div class="container min-vh-100 d-flex flex-column justify-content-center align-items-center py-4">
+        
+        <div class="card shadow-sm border-0 w-100 style="max-width: 800px;">
+            <div class="card-body p-4 p-md-5 text-center">
+                <h1 class="display-5 fw-bold text-primary mb-4">Dactylaro</h1>
 
-<body>
-    <main>
-        <h1>Dactylaro</h1>
+                <div class="row g-3 align-items-center justify-content-center mb-4">
+                    <div class="col-auto">
+                        <select id="duration" class="form-select border-primary-subtle">
+                            <option value="10">10s</option>
+                            <option value="30">30s</option>
+                            <option value="60">60s</option>
+                        </select>
+                    </div>
+                    <div class="col-auto">
+                        <button id="start" class="btn btn-primary px-4 shadow-sm">Démarrer</button>
+                    </div>
+                    <div class="col-12 d-flex justify-content-around fw-medium text-secondary border-top pt-3 mt-3">
+                        <span>Temps: <b id="time" class="text-dark">0s</b></span>
+                        <span>Mots: <b id="done" class="text-dark">0</b></span>
+                        <span>Score: <b id="score" class="text-dark">0</b> MPM</span>
+                    </div>
+                </div>
 
-        <label for="duration">Temps :</label>
-        <select id="duration">
-            <option value="10">10 secondes</option>
-            <option value="30">30 secondes</option>
-            <option value="60">60 secondes</option>
-        </select>
+                <div id="words" class="fs-4 py-4 mb-3 border rounded bg-white font-monospace overflow-hidden shadow-inner" style="min-height: 80px; letter-spacing: 1px;"></div>
+                <input type="text" id="input" class="form-control form-control-lg text-center border-2 mb-2" placeholder="Tapez ici..." disabled autocomplete="off">
+                <small id="state" class="text-danger fw-bold d-block mb-4 h-25">&nbsp;</small>
 
-        <button id="start">Démarrer</button>
+                <div class="text-start mt-4 border-top pt-4">
+                    <h5 class="text-primary-emphasis mb-3">Classement session</h5>
+                    <ol id="rank" class="list-group list-group-numbered list-group-flush text-muted small"></ol>
+                </div>
+            </div>
+        </div>
 
-        <p>Temps restant : <span id="time">0</span>s</p>
-        <p>Mots validés : <span id="done">0</span></p>
-        <p>Score : <span id="score">0</span> MPM</p>
-
-        <div id="words"></div>
-        <p id="state"></p>
-
-        <input id="input" type="text" autocomplete="off" disabled>
-
-        <h2>Classement session</h2>
-        <ol id="rank"></ol>
-    </main>
+    </div>
 </body>
-
 </html>
