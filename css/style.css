@@ -28,3 +28,25 @@ select {
     padding: 8px;
     font-size: 16px
 }
+
+/* Style pour le mot en cours de frappe (on enlève le soulignement global) */
+.current {
+    text-decoration: none; /* Optionnel : enlever le soulignement si tu préfères les couleurs */
+    font-weight: bold;
+}
+
+/* Style pour une lettre correcte */
+.letter-correct {
+    color: #2ecc71; /* Un beau vert */
+}
+
+/* Style pour une lettre incorrecte */
+.letter-incorrect {
+    color: #e74c3c; /* Un beau rouge */
+    background-color: rgba(231, 76, 60, 0.2); /* Léger fond rouge pour mieux voir */
+}
+
+/* Style pour la prochaine lettre attendue */
+.letter-next {
+    border-bottom: 2px solid #3498db; /* Soulignement bleu sous la lettre attendue */
+}

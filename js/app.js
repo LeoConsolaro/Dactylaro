@@ -4,71 +4,87 @@ const d = $('duration'), b = $('start'), w = $('words'), i = $('input'),
 
 let list = [], word = '', done = 0, left = 0, timer = 0, rank = [];
 
-// Génère une liste de 'n' mots aléatoires
-const pick = n => Array.from({ length: n }, () => WORDS[Math.floor(Math.random() * WORDS.length)]);
-
-// Affiche les mots dans la balise #words et gère le soulignement/couleur
-const draw = () => {
-    w.innerHTML = list.map((x, k) =>
-        `<span class="${k < done ? 'done' : k === done ? 'current' : ''}">${x}</span>`
-    ).join(' ');
+// Génère une liste de 'n' mots aléatoires SANS doublons
+const pick = (n, exclude = []) => {
+    const excluded = new Set(exclude);
+    let pool = WORDS.filter(w => !excluded.has(w));
+    for (let idx = pool.length - 1; idx > 0; idx--) {
+        const j = Math.floor(Math.random() * (idx + 1));
+        [pool[idx], pool[j]] = [pool[j], pool[idx]];
+    }
+    return pool.slice(0, n);
 };
 
-// Met à jour l'affichage du classement
-const board = () => r.innerHTML = rank.map(x => `<li>${x} MPM</li>`).join('');
+// Affiche les mots avec coloration des lettres en temps réel
+const draw = () => {
+    const visibleWords = list.slice(done, done + 5);
+    const typed = i.value; // Ce que l'utilisateur est en train de taper
 
-// Termine la session et calcule le score
+    w.innerHTML = visibleWords.map((wordText, k) => {
+        const isCurrent = k === 0;
+
+        if (isCurrent) {
+            // Découpage du mot actuel lettre par lettre pour la coloration
+            let lettersHtml = '';
+            for (let j = 0; j < wordText.length; j++) {
+                let charClass = '';
+                if (j < typed.length) {
+                    // Si la lettre tapée correspond : vert, sinon : rouge
+                    charClass = typed[j] === wordText[j] ? 'letter-correct' : 'letter-incorrect';
+                } else if (j === typed.length) {
+                    // Souligne la prochaine lettre attendue
+                    charClass = 'letter-next';
+                }
+                lettersHtml += `<span class="${charClass}">${wordText[j]}</span>`;
+            }
+            return `<span class="current">${lettersHtml}</span>`;
+        }
+        
+        // Mots suivants (affichage simple)
+        return `<span>${wordText}</span>`;
+    }).join(' ');
+};
+
+const board = () => r.innerHTML = rank.map(x => `<li>${x} Mots par minutes</li>`).join('');
+
 const end = () => {
     clearInterval(timer);
     i.disabled = true;
-    i.value = '';
     state.textContent = 'Session terminée';
-
-    // Calcul du score en Mots Par Minute (MPM)
-    const minutes = parseInt(d.value) / 60;
-    const mpm = Math.round(done / minutes);
+    
+    const duration = parseInt(d.value) || 60;
+    const mpm = Math.round(done / (duration / 60));
 
     s.textContent = mpm;
     rank.push(mpm);
-    rank.sort((a, b) => b - a); // Trie du meilleur au moins bon
+    rank.sort((a, b) => b - a);
     board();
 };
 
-// Vérifie la saisie à chaque lettre tapée
 const check = () => {
-    const ok = word.startsWith(i.value);
+    // On redessine à chaque lettre pour mettre à jour les couleurs
+    draw();
 
-    if (!ok) {
-        // L'utilisateur s'est trompé : on efface la mauvaise lettre immédiatement.
-        // Cela le "bloque" visuellement et l'empêche de continuer.
-        i.value = i.value.slice(0, -1);
-        state.textContent = 'Lettre incorrecte';
-    } else {
-        state.textContent = '';
-    }
-
-    // Si la saisie correspond exactement au mot cible
-    if (i.value === word) {
+    // Si le mot est parfaitement complété
+    if (i.value === word && word !== '') {
         done++;
         doneEl.textContent = done;
-        i.value = ''; // On vide le champ pour le mot suivant
+        i.value = ''; 
 
-        // Si l'utilisateur est très rapide et finit les 30 mots, on en rajoute
-        if (done >= list.length) {
-            list = list.concat(pick(30));
+        if (done >= list.length - 2) {
+            list = list.concat(pick(200, list));
         }
 
         word = list[done];
-        draw(); // Met à jour l'affichage (passe le mot en vert, souligne le suivant)
+        draw(); 
     }
 };
 
-// Initialisation au clic sur "Démarrer"
 b.onclick = () => {
     clearInterval(timer);
-    list = pick(30);
+    list = pick(200);
     done = 0;
-    left = parseInt(d.value);
+    left = parseInt(d.value) || 10;
     word = list[0];
 
     t.textContent = left;
@@ -78,9 +94,9 @@ b.onclick = () => {
 
     i.value = '';
     i.disabled = false;
-    i.focus(); // Place automatiquement le curseur dans le champ texte
+    i.focus(); 
 
-    draw(); // Déclenche l'affichage des mots
+    draw(); 
 
     timer = setInterval(() => {
         left--;
